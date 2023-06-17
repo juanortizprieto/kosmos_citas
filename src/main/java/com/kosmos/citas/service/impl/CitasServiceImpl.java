@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Date;
 import java.util.List;
 
@@ -63,10 +61,8 @@ public class CitasServiceImpl implements CitasService {
                 }
 
             }
-            System.out.println(ZonedDateTime.now().with(LocalTime.MIN));
-            System.out.println(ZonedDateTime.now().with(LocalTime.MAX));
-            citasEntity = citasRepository.findAllByDoctorAndFechaConsultaGreaterThanAndFechaConsultaLessThan(entity.getDoctor(), ZonedDateTime.now().with(LocalTime.MIN), ZonedDateTime.now().with(LocalTime.MAX));
-            System.out.println(citasEntity.size());
+            citasEntity = citasRepository.findAllByDoctorAndFechaConsultaGreaterThanAndFechaConsultaLessThan(entity.getDoctor(), LocalDateTime.of(entity.getFechaConsulta().toLocalDate(), LocalTime.MIN).atZone(ZoneId.systemDefault()), LocalDateTime.of(entity.getFechaConsulta().toLocalDate(), LocalTime.MAX).atZone(ZoneId.systemDefault()));
+
             if (citasEntity.size() >= 8) {
                 result.setExito(false);
                 result.setMensaje("El doctor no tiene mas citas disponibles");
